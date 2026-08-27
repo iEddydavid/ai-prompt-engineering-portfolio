@@ -1,4 +1,4 @@
-Edidiong David — AI Prompt Engineering Portfolio
+Edidiong David AI Prompt Engineering Portfolio
 
 AI Prompt Engineer · LLM Systems & Agent Design · Building for Nigerian and African Markets
 
