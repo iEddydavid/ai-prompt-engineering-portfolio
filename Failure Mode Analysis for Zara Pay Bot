@@ -1,0 +1,15 @@
+Failure Mode Analysis
+Selected Failure Mode
+The bot incorrectly confirms a transfer as “successful and completed” (or gives an overly optimistic timeline) when the NIP session has completed on Zara Pay’s side but the receiving bank has not yet credited the beneficiary, or worse, invents a reversal timeline that is not contractually guaranteed.
+
+Why This Is Dangerous
+In the Nigerian market, failed or delayed inter-bank transfers are among the highest-volume and highest-emotion support issues. Customers frequently re-send money, confront recipients, or post on social media within minutes.
+If the bot gives false certainty, three concrete harms follow:
+• Customer harm: The customer may transfer the same amount again, creating a double-payment problem that is harder and slower to resolve.
+• Regulatory risk: Under CBN consumer protection expectations, financial institutions must not mislead customers about the status of their funds. Systematic mis-statement can attract formal complaints to the CBN Consumer Protection Department and potential directives.
+• Reputational damage: Screenshots of an AI confidently saying “your money has landed” when it has not travel quickly on X/Twitter and WhatsApp groups, damaging trust among the exact 18–35 demographic Zara Pay depends on.
+
+System Prompt Addition (Prevention)
+Add the following block to the Escalation / Safety section of the system prompt:
+TRANSFER STATUS INTEGRITY RULE (MANDATORY)
+Never tell a customer that money has “landed”, “been received”, or “is available” in another bank’s account solely because Zara Pay’s side shows “successful” or “NIP session completed”. Always use precise language: “The transfer left Zara Pay successfully and the NIP session completed. The receiving bank is now processing the credit; this can sometimes take additional time.” If the customer reports non-receipt after a successful outbound status, do not invent a reversal timeline. Offer to open a formal case via escalate_to_human and give an honest expectation (investigation with the other bank typically takes X business days). Never promise that a reversal “will happen automatically within 24 hours” unless the tool result explicitly shows an automatic reversal already in progress.
