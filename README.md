@@ -55,13 +55,13 @@ Interactive Simulations
 
 Three standalone HTML simulations running in any browser with no internet connection required.
 
-Tokenizer and Attention Explorer — type any text and watch real-time tokenization including the Nigerian-language example showing why Pidgin costs more tokens than equivalent English. Includes a click-through attention weight visualisation.
+Tokenizer and Attention Explorer: type any text and watch real-time tokenization including the Nigerian-language example showing why Pidgin costs more tokens than equivalent English. Includes a click-through attention weight visualisation.
 
-RAG Pipeline Simulator — a Nigerian HR policy document queryable with real questions. Watch retrieval scores, chunk selection, prompt assembly, and grounded answer generation step by step. Includes a question that exposes a genuine document gap.
+RAG Pipeline Simulator: a Nigerian HR policy document queryable with real questions. Watch retrieval scores, chunk selection, prompt assembly, and grounded answer generation step by step. Includes a question that exposes a genuine document gap.
 
-AI Agent Simulator — a Nigerian fintech support agent running the Think-Act-Observe loop across four scenarios including the fraud case where the agent correctly stops itself from taking unauthorised action.
+AI Agent Simulator: a Nigerian fintech support agent running the Think-Act-Observe loop across four scenarios including the fraud case where the agent correctly stops itself from taking unauthorised action.
 
-RAG Pipeline — Nigerian HR Policy
+RAG Pipeline: Nigerian HR Policy
 
 A documented RAG architecture build for a Nigerian HR policy knowledge base, answering employee queries in both formal English and Nigerian Pidgin. Chunking decisions documented iteratively as an evidence-based engineering record. Retrieval tested across Pidgin and formal English inputs for equivalent underlying queries.
 
@@ -71,21 +71,21 @@ A complete multi-tool AI customer support agent for a Nigerian fintech company. 
 
 Technical Skills
 
-Prompting — zero-shot, few-shot, chain-of-thought, role prompting, ReAct, Tree of Thought, self-consistency, prompt chaining, XML structured outputs
+Prompting: zero-shot, few-shot, chain-of-thought, role prompting, ReAct, Tree of Thought, self-consistency, prompt chaining, XML structured outputs
 
-Agent systems — tool definition and boundary design, orchestrator-worker multi-agent patterns, planning loop design, failure mode handling
+Agent systems: tool definition and boundary design, orchestrator worker multi-agent patterns, planning loop design, failure mode handling
 
-RAG — chunking strategy, overlap design, embedding pipeline, semantic retrieval, grounding, hallucination reduction
+RAG: chunking strategy, overlap design, embedding pipeline, semantic retrieval, grounding, hallucination reduction
 
-Evaluation — golden dataset construction, scoring rubric design, LLM-as-judge, adversarial and bias testing
+Evaluation: golden dataset construction, scoring rubric design, LLM-as-judge, adversarial and bias testing
 
-Safety — prompt injection defence, escalation architecture, regulatory awareness for Nigerian fintech
+Safety: prompt injection defence, escalation architecture, regulatory awareness for Nigerian fintech
 
-Models and APIs — Claude API, OpenAI API, Mistral via Ollama, LangChain concepts
+Models and APIs: Claude API, OpenAI API, Mistral via Ollama, LangChain concepts
 
-Fine-tuning — PEFT and LoRA concepts, dataset format, RAG versus fine-tuning decision framework
+Fine-tuning: PEFT and LoRA concepts, dataset format, RAG versus fine tuning decision framework
 
-Nigerian market — Pidgin and code-switched language handling, CBN regulatory context, BVN/NIN processes, cultural localisation in system prompts
+Nigerian market: Pidgin and code-switched language handling, CBN regulatory context, BVN/NIN processes, cultural localisation in system prompts
 
 Currently Building
 
