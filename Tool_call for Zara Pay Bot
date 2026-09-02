@@ -1,0 +1,46 @@
+Tool Definitions
+Minimum of five tools
+Each follows the production pattern: clear description, explicit when to use, when not to use, and parameters
+The runtime is expected to inject the authenticated user_id / session context automatically; the bot never asks the customer for passwords or BVN
+
+Tool 1: get_wallet_balance
+Description: Returns the customer’s current available wallet balance and any pending holds in Naira.
+When to use: Customer asks “how much do I have?”, “what is my balance?”, or any direct balance query.
+When NOT to use: When the customer is asking about Zara Vault balance specifically (use get_vault_details instead). Do not use for historical balances.
+Parameters: None required beyond authenticated session context.
+
+Tool 2: get_transaction_status
+Description: Looks up the status of one or more recent transfers, airtime purchases, or bill payments. Returns status, reference, amount, counterparty, and timestamp.
+When to use: Customer asks about a specific transfer, “where is my money?”, airtime that did not drop, or bill payment confirmation.
+When NOT to use: For general balance questions or Vault interest calculations. Do not use to pull another customer’s data.
+Parameters: 
+• amount_naira (optional, number): approximate amount to match
+• direction (optional, string: "outbound" | "inbound" | "any")
+• lookback_hours (optional, integer, default 48)
+• reference (optional, string): exact transaction reference if provided by customer.
+
+Tool 3: get_vault_details
+Description: Returns Zara Vault balance, current interest rate, lock status, maturity date (if locked), and withdrawal eligibility rules for the authenticated user.
+When to use: Any question about Vault balance, interest, “when can I withdraw?”, or Vault rules.
+When NOT to use: For regular wallet balance or transfer status.
+Parameters: None required beyond authenticated session.
+
+Tool 4: check_airtime_or_bill_status
+Description: Checks the delivery status of a recent airtime/data purchase or bill payment (electricity, DSTV, etc.).
+When to use: Customer says airtime did not drop, token was not generated, or DSTV/subscription was not renewed.
+When NOT to use: For wallet-to-wallet or bank transfers (use get_transaction_status).
+Parameters: 
+• service_type (string: "airtime" | "data" | "electricity" | "cable" | "other")
+• amount_naira (optional)
+• lookback_hours (optional, default 24)
+• phone_or_meter (optional, string): last few digits if customer provides them
+
+Tool 5: escalate_to_human
+Description: Creates a support ticket in the human agent queue, attaches conversation summary and relevant tool outputs, and returns a ticket reference ID.
+When to use: Fraud reports, account restrictions that cannot be explained, explicit request for human, unresolved disputes after tool checks, or any Scope Out situation that requires human judgment.
+When NOT to use: For routine balance or status questions that tools can answer. Do not escalate simply because the customer is mildly annoyed.
+Parameters: 
+• reason (string, required): short category e.g. "suspected_fraud", "failed_transfer_dispute", "account_restriction", "customer_requested_human", "other"
+• priority (string: "normal" | "high" | "urgent"), default "normal". Use "urgent" for fraud.
+• summary (string, required): 1–3 sentence summary of the issue and what has already been checked
+• customer_visible_note (optional, string): message to show the customer about next steps
