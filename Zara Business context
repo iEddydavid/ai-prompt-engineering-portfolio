@@ -1,0 +1,64 @@
+Zara Pay · Customer Support Bot
+
+1. Business Context
+Zara Pay is a mobile first Nigerian fintech serving young adults aged 18–35 in Lagos, Abuja, and Port Harcourt. The platform enables instant Naira transfers (via NIP rails), airtime and data purchases across all major networks (MTN, Airtel, Glo, 9mobile), bill payments (electricity, DSTV, internet, and other utilities), and a goal based savings product called Zara Vault that currently offers competitive interest rates on locked savings. 
+Customers interact almost exclusively through the Android/iOS app and WhatsApp, reflecting the mobile native habits of the target demographic.
+Support volume has outgrown the human agent team. The majority of incoming chats are tier-one queries: “Has my
+transfer landed?”, “Why was I charged for airtime that never came?”, “How much is in my Vault and when can I withdraw?”, “Why is my account restricted?”, and basic how-to questions. These are high frequency, low-complexity, and emotionally charged because money is involved. The AI support bot is designed to resolve the bulk of these queries in under 60 seconds, maintain brand warmth that feels authentically Nigerian, escalate cleanly when a human or specialised team is required (especially fraud and KYC cases), and free human agents to focus on complex disputes and high value retention conversations.
+
+2. Architecture Decision Recommendation
+Hybrid architecture: Strong system prompt and Retrieval Augmented Generation (RAG) over a curated knowledge base plus tool calling for live transactional data and actions. Fine tuning is not recommended as the primary approach at this stage.
+
+Justification for using Rag system to build Zara bot
+Zara Pay’s product surface and policy environment change frequently: fee schedules, Vault interest rates, promotional campaigns, CBN circulars affecting transfer limits or KYC requirements, and new billers are added regularly. A pure fine-tuned model would require expensive and slow re-training cycles every time knowledge shifts, and would still risk hallucination on edge cases. A pure system-prompt-only approach cannot reliably answer
+product specific questions (exact fees, Vault lock periods, current reversal timelines) without stuffing the entire knowledge base into the context window, which is both costly and brittle.
+RAG solves the knowledge problem: help articles, fee tables, FAQs, and policy documents live in a vector store that can be updated by the content or compliance team without model retraining. The system prompt governs persona, tone, safety, escalation logic, and injection defence. Tool calling gives the bot real-time access to the customer’s balance, recent transactions, Vault status, and the ability to create escalation tickets, exactly the actions a human agent would perform. This combination is the production pattern used by mature support systems that must stay accurate under regulatory scrutiny while remaining responsive to product changes.
+
+
+Decision Framework Applied
+• Knowledge volatility high: favour RAG over fine tuning
+• Need for live account data and actions: mandatory tool calling
+• Brand voice and safety critical: detailed system prompt is non negotiable
+• Cost and latency constraints for a mobile first Nigerian user base: avoid unnecessarily large fine tuned models; use a capable base model with RAG plus  tools
+
+Questions for the Zara Pay Before Finalising
+1. What is the current size and update frequency of the internal help centre / knowledge base, and who owns content accuracy?
+2. What is the target end-to-end latency for a typical support reply (including any tool calls)? Sub-3-second is ideal for WhatsApp and in-app chat.
+3. Which internal APIs already exist for balance, transactions, Vault, and ticket creation, and what authentication model will the bot use (session token, service account, etc.)?
+4. What is the monthly budget ceiling for inference and embedding costs at projected volume?
+5. Are there any CBN or NDPA mandated logging, retention, or human-in-the-loop requirements for automated financial advice or account actions?
+6. What percentage of current chats already contain Pidgin, mixed language, or emotionally charged language, and is there existing labelled data we can use for evaluation?
+3. Full System Prompt
+The complete system prompt below is ready to be deployed. It follows the six-section format and is written for a production Nigerian fintech context.
+
+Failure Mode Analysis
+Selected Failure Mode
+The bot incorrectly confirms a transfer as “successful and completed” (or gives an overly optimistic timeline) when the NIP session has completed on Zara Pay’s side but the receiving bank has not yet credited the beneficiary, or worse, invents a reversal timeline that is not contractually guaranteed.
+
+Why This Is Dangerous
+In the Nigerian market, failed or delayed inter-bank transfers are among the highest-volume and highest-emotion support issues. Customers frequently re-send money, confront recipients, or post on social media within minutes.
+If the bot gives false certainty, three concrete harms follow:
+• Customer harm: The customer may transfer the same amount again, creating a double-payment problem that is harder and slower to resolve.
+• Regulatory risk: Under CBN consumer protection expectations, financial institutions must not mislead customers about the status of their funds. Systematic mis-statement can attract formal complaints to the CBN Consumer Protection Department and potential directives.
+• Reputational damage: Screenshots of an AI confidently saying “your money has landed” when it has not travel quickly on X/Twitter and WhatsApp groups, damaging trust among the exact 18–35 demographic Zara Pay depends on.
+
+System Prompt Addition (Prevention)
+Add the following block to the Escalation / Safety section of the system prompt:
+TRANSFER STATUS INTEGRITY RULE (MANDATORY)
+Never tell a customer that money has “landed”, “been received”, or “is available” in another bank’s account solely because Zara Pay’s side shows “successful” or “NIP session completed”. Always use precise language: “The transfer left Zara Pay successfully and the NIP session completed. The receiving bank is now processing the credit; this can sometimes take additional time.” If the customer reports non-receipt after a successful outbound status, do not invent a reversal timeline. Offer to open a formal case via escalate_to_human and give an honest expectation (investigation with the other bank typically takes X business days). Never promise that a reversal “will happen automatically within 24 hours” unless the tool result explicitly shows an automatic reversal already in progress.
+
+Client Facing Summary
+What This Bot Delivers for Zara Pay
+We have designed a production-ready AI support specialist named Zara. She will sit inside your existing WhatsApp and in-app chat channels and handle the majority of everyday customer questions, balance checks, “where is my transfer?”, airtime that has not dropped, Zara Vault questions, and basic how-to guidance, in seconds rather than minutes or hours.
+Zara speaks the way your customers speak. She understands both clear English and everyday Pidgin, stays calm when people are frustrated about money, and never pretends to be a human agent. When a problem is too serious or too complex for her (especially anything that looks like fraud or an account restriction), she creates a clean ticket for your human team and tells the customer exactly what will happen next.
+What the Bot Will Not Do
+Zara will not reverse transactions on her own, promise refunds, give investment advice, change security settings, or discuss other customers’ information. These boundaries are deliberate. They protect Zara Pay from regulatory complaints, social media backlash, and the kind of costly mistakes that occur when an automated system over-reaches on money matters.
+Why These Boundaries Protect the Business
+In Nigerian fintech, trust is fragile and complaints travel fast. By restricting the bot to what it can verify in real time and forcing human involvement on high risk issues, we keep customer funds safer, keep CBN consumer-protection expectations intact, and keep your brand reputation under your control.
+How We Will Measure Success
+Three business metrics:
+1.      Tier-1 containment rate: percentage of support conversations fully resolved by Zara without human hand-off (target to be set jointly after pilot).
+2.      Average first-response time and customer effort: measured via existing chat analytics and a simple post-chat rating.
+3.      Escalation quality: percentage of fraud and dispute tickets that arrive with complete context and correct priority, reducing average handling time for human agents.
+With these, the metrics tell us whether the bot is reducing cost and queue volume while actually improving the experience for the young Nigerians who trust Zara Pay with their money.
+
