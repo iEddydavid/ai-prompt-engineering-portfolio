@@ -1,19 +1,18 @@
 Zara Pay · Customer Support Bot
 
-1. Business Context
+Business Context
 Zara Pay is a mobile first Nigerian fintech serving young adults aged 18–35 in Lagos, Abuja, and Port Harcourt. The platform enables instant Naira transfers (via NIP rails), airtime and data purchases across all major networks (MTN, Airtel, Glo, 9mobile), bill payments (electricity, DSTV, internet, and other utilities), and a goal based savings product called Zara Vault that currently offers competitive interest rates on locked savings. 
 Customers interact almost exclusively through the Android/iOS app and WhatsApp, reflecting the mobile native habits of the target demographic.
 Support volume has outgrown the human agent team. The majority of incoming chats are tier-one queries: “Has my
 transfer landed?”, “Why was I charged for airtime that never came?”, “How much is in my Vault and when can I withdraw?”, “Why is my account restricted?”, and basic how-to questions. These are high frequency, low-complexity, and emotionally charged because money is involved. The AI support bot is designed to resolve the bulk of these queries in under 60 seconds, maintain brand warmth that feels authentically Nigerian, escalate cleanly when a human or specialised team is required (especially fraud and KYC cases), and free human agents to focus on complex disputes and high value retention conversations.
 
-2. Architecture Decision Recommendation
+Architecture Decision Recommendation
 Hybrid architecture: Strong system prompt and Retrieval Augmented Generation (RAG) over a curated knowledge base plus tool calling for live transactional data and actions. Fine tuning is not recommended as the primary approach at this stage.
 
 Justification for using Rag system to build Zara bot
 Zara Pay’s product surface and policy environment change frequently: fee schedules, Vault interest rates, promotional campaigns, CBN circulars affecting transfer limits or KYC requirements, and new billers are added regularly. A pure fine-tuned model would require expensive and slow re-training cycles every time knowledge shifts, and would still risk hallucination on edge cases. A pure system-prompt-only approach cannot reliably answer
 product specific questions (exact fees, Vault lock periods, current reversal timelines) without stuffing the entire knowledge base into the context window, which is both costly and brittle.
 RAG solves the knowledge problem: help articles, fee tables, FAQs, and policy documents live in a vector store that can be updated by the content or compliance team without model retraining. The system prompt governs persona, tone, safety, escalation logic, and injection defence. Tool calling gives the bot real-time access to the customer’s balance, recent transactions, Vault status, and the ability to create escalation tickets, exactly the actions a human agent would perform. This combination is the production pattern used by mature support systems that must stay accurate under regulatory scrutiny while remaining responsive to product changes.
-
 
 Decision Framework Applied
 • Knowledge volatility high: favour RAG over fine tuning
@@ -61,4 +60,3 @@ Three business metrics:
 2.      Average first-response time and customer effort: measured via existing chat analytics and a simple post-chat rating.
 3.      Escalation quality: percentage of fraud and dispute tickets that arrive with complete context and correct priority, reducing average handling time for human agents.
 With these, the metrics tell us whether the bot is reducing cost and queue volume while actually improving the experience for the young Nigerians who trust Zara Pay with their money.
-
