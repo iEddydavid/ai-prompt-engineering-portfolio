@@ -27,21 +27,21 @@ Zara Pay is a Nigerian mobile first fintech serving users aged 18 to 35 across L
 
 What the specification contains
 
-Architecture decision — RAG combined with a detailed system prompt and tool calling, with full justification referencing knowledge volatility, CBN regulatory change frequency, and cost constraints for a mobile-first Nigerian user base.
+Architecture decision: RAG combined with a detailed system prompt and tool calling, with full justification referencing knowledge volatility, CBN regulatory change frequency, and cost constraints for a mobile-first Nigerian user base.
 
-Full system prompt — six-section format covering identity, scope, tone, escalation, injection defense, and a worked example in Nigerian Pidgin. Includes the Transfer Status Integrity Rule, a mandatory accuracy safeguard preventing the bot from falsely confirming interbank credits.
+Full system prompt: six section format covering identity, scope, tone, escalation, injection defense, and a worked example in Nigerian Pidgin. Includes the Transfer Status Integrity Rule, a mandatory accuracy safeguard preventing the bot from falsely confirming interbank credits.
 
-Five tool definitions — get_wallet_balance, get_transaction_status, get_vault_details, check_airtime_or_bill_status, escalate_to_human — each with explicit when-to-use and when-NOT-to-use boundaries, parameters, and cross-tool referencing rules.
+Five tool definitions: get_wallet_balance, get_transaction_status, get_vault_details, check_airtime_or_bill_status, escalate_to_human, each with explicit when-to-use and when-NOT-to-use boundaries, parameters, and cross-tool referencing rules.
 
-Golden dataset — eight test cases covering happy path, Pidgin language variety, emotional intensity, boundary testing, adversarial prompt injection, escalation verification, airtime status, and account restriction.
+Golden dataset: eight test cases covering happy path, Pidgin language variety, emotional intensity, boundary testing, adversarial prompt injection, escalation verification, airtime status, and account restriction.
 
-Scoring rubric — three-criterion rubric (Accuracy, Empathy, Action) with Zara Pay specific score definitions at every level. Includes a production gate: responses scoring below 7 out of 15 must not be deployed.
+Scoring rubric: three-criterion rubric (Accuracy, Empathy, Action) with Zara Pay specific score definitions at every level. Includes a production gate: responses scoring below 7 out of 15 must not be deployed.
 
-LLM-as-judge prompt — ready-to-use judge prompt with four Zara Pay-specific critical rules, including a hard floor of Action = 1 for any fraud escalation failure.
+LLM-as-judge prompt: ready-to-use judge prompt with four Zara Pay-specific critical rules, including a hard floor of Action = 1 for any fraud escalation failure.
 
-Failure mode analysis — identifies false transfer confirmation as the highest-risk failure mode, with regulatory, reputational, and customer harm analysis, and the exact system prompt addition that prevents it.
+Failure mode analysis: identifies false transfer confirmation as the highest-risk failure mode, with regulatory, reputational, and customer harm analysis, and the exact system prompt addition that prevents it.
 
-Client-facing summary — one page written for a non-technical CEO, leading with business outcomes and three measurable success metrics.
+Client-facing summary: one page written for a non-technical CEO, leading with business outcomes and three measurable success metrics.
 
 Reference Book — Prompt Engineering and Generative AI
 
